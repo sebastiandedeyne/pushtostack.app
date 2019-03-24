@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Middleware\CurrentUserScope;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth')->group(function () {
+Route::middleware('auth', CurrentUserScope::class)->group(function () {
     Route::resource('links', 'LinksController');
 });
 

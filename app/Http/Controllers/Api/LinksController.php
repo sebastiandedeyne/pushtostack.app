@@ -2,21 +2,19 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Api\Link;
+use App\Link;
+use Illuminate\Http\Request;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class LinksController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-        return Link::collection(
-            $request
-                ->user()
-                ->links()
-                ->latest('added_at')
-                ->paginate()
-        );
+        return QueryBuilder::for(Link::class)
+            ->allowedFilters('stack_uuid')
+            ->latest('added_at')
+            ->paginate();
     }
 
     public function create()

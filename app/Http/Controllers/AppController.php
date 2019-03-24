@@ -2,17 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\Api\Stack;
+use App\Stack;
 use Illuminate\Http\Request;
-
 
 class AppController extends Controller
 {
     public function __invoke(Request $request)
     {
-        $stacks = Stack::collection(
-            $request->user()->stacks()->orderBy('order')->get()
-        )->toArray($request);
+        $stacks = Stack::orderBy('order')->get();
 
         return view('app', compact('stacks'));
     }

@@ -12,4 +12,8 @@ class Stack extends Model
     public $timestamps = false;
 
     protected $guarded = [];
+
+    protected $hidden = [
+        'id', 'user_id'
+    ];
 }

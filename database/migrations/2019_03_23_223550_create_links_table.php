@@ -15,6 +15,7 @@ class CreateLinksTable extends Migration
             $table->string('title');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('stack_id');
+            $table->string('stack_uuid')->index();
             $table->timestamp('added_at');
 
             $table->foreign('user_id')->references('id')->on('users');

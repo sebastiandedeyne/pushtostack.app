@@ -28,7 +28,10 @@ class LinksProjector implements Projector
             'title' => $event->title,
             'user_id' => $user->id,
             'stack_id' => $stack->id,
+            'stack_uuid' => $event->stack_uuid,
             'added_at' => $event->added_at,
         ]);
+
+        $stack->increment('link_count');
     }
 }

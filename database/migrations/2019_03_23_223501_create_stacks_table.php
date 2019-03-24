@@ -13,6 +13,7 @@ class CreateStacksTable extends Migration
             $table->uuid('uuid');
             $table->string('name');
             $table->unsignedInteger('order');
+            $table->unsignedInteger('link_count')->default(0);
             $table->unsignedBigInteger('user_id');
 
             $table->foreign('user_id')->references('id')->on('users');
