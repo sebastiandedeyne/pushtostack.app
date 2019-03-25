@@ -45,7 +45,7 @@ export default function Stack({ uuid }) {
 
     return (
         <>
-            <form className="w-full flex border-b border-gray-200" onSubmit={saveLink}>
+            {/* <form className="w-full flex" onSubmit={saveLink}>
                 <input
                     type="text"
                     value={newLink}
@@ -54,17 +54,17 @@ export default function Stack({ uuid }) {
                     placeholder="https://pushtostack.app"
                 />
                 <button className="px-3 py-2">Push</button>
-            </form>
+            </form> */}
             <ul>
                 {links.map(link => (
                     <li key={link.uuid}>
-                        <a
-                            className="block px-3 py-2 border-b border-gray-200"
-                            href={link.url}
-                            target="_blank"
-                            rel="nofollow"
-                        >
-                            {link.title} <span className="inline-block text-gray-600">– {link.domain}</span>
+                        <a className="block pl-6 py-2" href={link.url} target="_blank" rel="nofollow">
+                            <span
+                                className="inline-block w-5 h-5 bg-gray-300 rounded mr-3"
+                                style={{ transform: "translateY(0.225em)" }}
+                            />
+                            <span className="font-medium text-gray-900">{link.title}</span>{" "}
+                            <span className="inline-block text-gray-600"> – {link.domain}</span>
                         </a>
                     </li>
                 ))}
