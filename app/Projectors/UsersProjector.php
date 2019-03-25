@@ -18,10 +18,14 @@ class UsersProjector implements Projector
     public function onUserRegistered(UserRegistered $event)
     {
         User::create([
-            'uuid' => $event->uuid,
+            'uuid' => $event->user_uuid,
             'name' => $event->name,
             'email' => $event->email,
             'password' => $event->password,
+        ])->stacks()->create([
+            'uuid' => $event->inbox_uuid,
+            'name' => 'Inbox',
+            'order' => 1,
         ]);
     }
 }

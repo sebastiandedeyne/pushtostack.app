@@ -18,7 +18,7 @@ class StacksProjector implements Projector
     public function onStackCreated(StackCreated $event)
     {
         User::findByUuid($event->user_uuid)->stacks()->create([
-            'uuid' => $event->uuid,
+            'uuid' => $event->stack_uuid,
             'name' => $event->name,
             'order' => $event->order,
         ]);

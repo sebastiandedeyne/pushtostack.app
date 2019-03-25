@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\LinkAdded;
 use App\Http\Controllers\Controller;
 use App\Link;
+use App\Stack;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class LinksController extends Controller
@@ -17,14 +21,24 @@ class LinksController extends Controller
             ->paginate();
     }
 
-    public function create()
-    {
-        //
-    }
-
     public function store(Request $request)
     {
-        //
+        $attributes = $request->validate([
+            'url' => 'required|url',
+        ]);
+
+        $linkUuid = uuid();
+
+        event(new LinkAdded([
+            'link_uuid' => $linkUuid,
+            'user_uuid' => $request->user()->uuid,
+            'stack_uuid' => Stack::first()->uuid,
+            'url' => $attributes['url'],
+            'title' => null,
+            'added_at' => Carbon::now()->toDateTimeString(),
+        ]));
+
+        return Link::findByUuid($linkUuid);
     }
 
     public function show($id)

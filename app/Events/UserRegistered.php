@@ -8,7 +8,7 @@ use Spatie\DataTransferObject\DataTransferObject;
 class UserRegistered extends DataTransferObject implements ShouldBeStored
 {
     /** @var string */
-    public $uuid;
+    public $user_uuid;
 
     /** @var string */
     public $name;
@@ -18,4 +18,7 @@ class UserRegistered extends DataTransferObject implements ShouldBeStored
 
     /** @var string */
     public $password;
+
+    /** @var string */
+    public $inbox_uuid;
 }

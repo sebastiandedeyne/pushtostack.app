@@ -8,6 +8,7 @@ use App\User;
 use Spatie\EventProjector\Projectors\Projector;
 use Spatie\EventProjector\Projectors\ProjectsEvents;
 use App\Stack;
+use App\Events\TitleFetched;
 
 class LinksProjector implements Projector
 {
@@ -15,6 +16,7 @@ class LinksProjector implements Projector
 
     protected $handlesEvents = [
         LinkAdded::class,
+        TitleFetched::class,
     ];
 
     public function onLinkAdded(LinkAdded $event, $storedEvent)
@@ -23,9 +25,10 @@ class LinksProjector implements Projector
         $stack = Stack::findByUuid($event->stack_uuid);
 
         Link::create([
-            'uuid' => $event->uuid,
+            'uuid' => $event->link_uuid,
             'url' => $event->url,
-            'title' => $event->title,
+            'domain' => explode('/', $event->url)[2],
+            'title' => $event->title ?: $event->url,
             'user_id' => $user->id,
             'stack_id' => $stack->id,
             'stack_uuid' => $event->stack_uuid,
@@ -33,5 +36,11 @@ class LinksProjector implements Projector
         ]);
 
         $stack->increment('link_count');
+    }
+
+    public function onTitleFetched(TitleFetched $event)
+    {
+        // Link::findByUuid($event->link_uuid)
+        //     ->update(['title' => $event->title]);
     }
 }

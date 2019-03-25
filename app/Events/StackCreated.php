@@ -8,7 +8,7 @@ use Spatie\DataTransferObject\DataTransferObject;
 class StackCreated extends DataTransferObject implements ShouldBeStored
 {
     /** @var string */
-    public $uuid;
+    public $stack_uuid;
 
     /** @var string */
     public $user_uuid;

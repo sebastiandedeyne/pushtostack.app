@@ -12,6 +12,7 @@ class CreateLinksTable extends Migration
             $table->bigIncrements('id');
             $table->uuid('uuid');
             $table->string('url');
+            $table->string('domain');
             $table->string('title');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('stack_id');

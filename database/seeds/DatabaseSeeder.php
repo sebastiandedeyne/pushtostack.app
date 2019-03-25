@@ -7,7 +7,6 @@ use App\Stack;
 use App\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
@@ -37,15 +36,71 @@ class DatabaseSeeder extends Seeder
             'Writing is Thinking',
             'Writing',
         ],
+        [
+            'https://medium.com/thrive-global/ikigai-the-japanese-secret-to-a-long-and-happy-life-might-just-help-you-live-a-more-fulfilling-9871d01992b7',
+            'Ikigai: The Japanese Secret to a Long and Happy Life Might Just Help You Live a More Fulfilling Life',
+            'Life',
+        ],
+        [
+            'https://medium.com/@caseorganic/why-do-we-keep-building-cars-with-touchscreens-alt-the-hidden-lives-of-touchscreens-55faf92799bf',
+            'The Hidden Cost of Touchscreens',
+            'Design',
+        ],
+        [
+            'https://www.nytimes.com/2018/05/16/technology/moviepass-economy-startups.html',
+            'The Entire Economy Is MoviePass Now. Enjoy It While You Can.',
+            'Business',
+        ],
+        [
+            'https://frankchimero.com/blog/2016/new-yorker/',
+            'Hi, I’d Like to Add Myself to the New Yorker',
+            'Design',
+        ],
+        [
+            'https://www.remoteonly.org/',
+            'Remote only',
+            'Work',
+        ],
+        [
+            'https://reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html',
+            'You Probably Don\'t Need Derived State',
+            'Programming',
+        ],
+        [
+            'https://simonkollross.de/posts/vuejs-using-v-model-with-objects-for-custom-components',
+            'VueJS: Using v-model with objects for custom components',
+            'Programming',
+        ],
+        [
+            'https://spacecraft.ssl.umd.edu/akins_laws.html',
+            'Akin\'s Laws of Spacecraft Design',
+            'Programming',
+        ],
+        [
+            'https://icidasset.com/writings/building-blocks/',
+            'Building Blocks — I.A.',
+            'Programming',
+        ],
+        [
+            'https://medium.com/startupwatching/i-emptied-my-savings-to-buy-a-newsletter-35508bf1c810',
+            'I emptied my savings to buy a newsletter',
+            'Programming',
+        ],
+        [
+            'https://csswizardry.com/2017/10/airplanes-and-ashtrays/',
+            'Airplanes and Ashtrays',
+            'Programming',
+        ],
     ];
 
     public function run()
     {
         event(new UserRegistered([
-            'uuid' => $userUuid = (string) Str::uuid(),
+            'user_uuid' => $userUuid = uuid(),
             'name' => 'Sebastian',
             'email' => 'sebastiandedeyne@gmail.com',
             'password' => bcrypt('secret'),
+            'inbox_uuid' => uuid(),
         ]));
 
         $user = User::findByUuid($userUuid);
@@ -53,7 +108,7 @@ class DatabaseSeeder extends Seeder
         foreach ($this->links as [$url, $title, $stackName]) {
             if (!$stack = Stack::where('name', $stackName)->first()) {
                 event(new StackCreated([
-                    'uuid' => (string) Str::uuid(),
+                    'stack_uuid' => uuid(),
                     'user_uuid' => $user->uuid,
                     'name' => $stackName,
                     'order' => $user->stacks()->max('order') + 1,
@@ -63,7 +118,7 @@ class DatabaseSeeder extends Seeder
             }
 
             event(new LinkAdded([
-                'uuid' => (string) Str::uuid(),
+                'link_uuid' => uuid(),
                 'user_uuid' => $user->uuid,
                 'stack_uuid' => $stack->uuid,
                 'url' => $url,

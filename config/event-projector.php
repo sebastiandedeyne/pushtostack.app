@@ -19,7 +19,7 @@ return [
      * can be registered in this array or a service provider.
      */
     'reactors' => [
-        App\Reactors\UsersReactor::class
+        App\Reactors\LinksReactor::class,
     ],
 
     /*
