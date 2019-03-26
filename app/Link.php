@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Support\HasUuid;
+use App\Events\Broadcast\LinkUpdated;
 
 class Link extends Model
 {
@@ -21,6 +22,19 @@ class Link extends Model
     protected $casts = [
         'added_at' => 'datetime',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function (self $link) {
+            event(new LinkUpdated($link));
+        });
+
+        static::updated(function (self $link) {
+            event(new LinkUpdated($link));
+        });
+    }
 
     public function stack(): BelongsTo
     {

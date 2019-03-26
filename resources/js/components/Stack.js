@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 export default function Stack({ uuid }) {
-    const [newLink, setNewLink] = useState("");
+    const [newLinks, setNewLinks] = useState(["https://spatie.be"]);
     const [links, setLinks] = useState([]);
 
     useEffect(() => {
@@ -29,7 +29,7 @@ export default function Stack({ uuid }) {
 
         fetch("/api/links", {
             method: "POST",
-            body: JSON.stringify({ url: newLink }),
+            body: JSON.stringify({ url: newLinks[0] }),
             headers: {
                 "Content-Type": "application/json",
                 Accept: "application/json, text-plain, */*",
@@ -39,36 +39,45 @@ export default function Stack({ uuid }) {
             .then(res => res.json())
             .then(link => {
                 setLinks([link, ...links]);
-                setNewLink("");
+                setNewLinks(["https://spatie.be"]);
             });
     }
 
     return (
-        <>
-            {/* <form className="w-full flex" onSubmit={saveLink}>
-                <input
-                    type="text"
-                    value={newLink}
-                    onChange={e => setNewLink(e.target.value)}
-                    className="flex-1 px-3 focus:outline-none"
-                    placeholder="https://pushtostack.app"
-                />
-                <button className="px-3 py-2">Push</button>
-            </form> */}
-            <ul>
-                {links.map(link => (
-                    <li key={link.uuid}>
-                        <a className="block pl-6 py-2" href={link.url} target="_blank" rel="nofollow">
+        <ul>
+            <li>
+                <form className="w-full flex pl-6 py-2" onSubmit={saveLink}>
+                    <span className="w-5 h-5 bg-gray-300 rounded mr-3" style={{ transform: "translateY(0.225em)" }} />
+                    <input
+                        type="text"
+                        value={newLinks[0]}
+                        onChange={e => setNewLinks([e.target.value])}
+                        className="flex-1 font-medium focus:outline-none"
+                        style={{ transform: "translateY(0.075em)" }}
+                        placeholder="Paste an URL..."
+                    />
+                </form>
+            </li>
+            {links.map(link => (
+                <li key={link.uuid}>
+                    <a className="block pl-6 py-2" href={link.url} target="_blank" rel="nofollow">
+                        {link.favicon_url ? (
+                            <img
+                                src={link.favicon_url}
+                                alt={`Favicon for ${link.title}`}
+                                className="inline-block w-5 h-5 rounded mr-3"
+                            />
+                        ) : (
                             <span
                                 className="inline-block w-5 h-5 bg-gray-300 rounded mr-3"
                                 style={{ transform: "translateY(0.225em)" }}
                             />
-                            <span className="font-medium text-gray-900">{link.title}</span>{" "}
-                            <span className="inline-block text-gray-600"> – {link.domain}</span>
-                        </a>
-                    </li>
-                ))}
-            </ul>
-        </>
+                        )}
+                        <span className="font-medium text-gray-900">{link.title}</span>{" "}
+                        <span className="inline-block text-gray-600"> – {link.domain}</span>
+                    </a>
+                </li>
+            ))}
+        </ul>
     );
 }

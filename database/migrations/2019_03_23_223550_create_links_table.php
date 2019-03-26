@@ -14,6 +14,7 @@ class CreateLinksTable extends Migration
             $table->string('url');
             $table->string('domain');
             $table->string('title');
+            $table->text('favicon_url')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('stack_id');
             $table->string('stack_uuid')->index();

@@ -9,6 +9,7 @@ use Spatie\EventProjector\Projectors\Projector;
 use Spatie\EventProjector\Projectors\ProjectsEvents;
 use App\Stack;
 use App\Events\TitleFetched;
+use App\Events\FaviconFetched;
 
 class LinksProjector implements Projector
 {
@@ -17,9 +18,10 @@ class LinksProjector implements Projector
     protected $handlesEvents = [
         LinkAdded::class,
         TitleFetched::class,
+        FaviconFetched::class,
     ];
 
-    public function onLinkAdded(LinkAdded $event, $storedEvent)
+    public function onLinkAdded(LinkAdded $event)
     {
         $user = User::findByUuid($event->user_uuid);
         $stack = Stack::findByUuid($event->stack_uuid);
@@ -40,7 +42,13 @@ class LinksProjector implements Projector
 
     public function onTitleFetched(TitleFetched $event)
     {
-        // Link::findByUuid($event->link_uuid)
-        //     ->update(['title' => $event->title]);
+        Link::findByUuid($event->link_uuid)
+            ->update(['title' => $event->title]);
+    }
+
+    public function onFaviconFetched(FaviconFetched $event)
+    {
+        Link::findByUuid($event->link_uuid)
+            ->update(['favicon_url' => $event->url]);
     }
 }
