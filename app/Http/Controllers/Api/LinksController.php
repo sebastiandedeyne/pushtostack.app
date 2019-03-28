@@ -6,10 +6,8 @@ use App\Events\LinkAdded;
 use App\Events\LinkDeleted;
 use App\Http\Controllers\Controller;
 use App\Projections\Link;
-use App\Projections\Stack;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Spatie\QueryBuilder\QueryBuilder;
 
