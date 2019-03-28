@@ -2,9 +2,9 @@
 
 namespace App\Http\Middleware;
 
-use App\Link;
+use App\Projections\Link;
 use App\Scopes\UserScope;
-use App\Stack;
+use App\Projections\Stack;
 use Closure;
 
 class CurrentUserScope

@@ -19,9 +19,4 @@ class CreateProjectorStatusesTable extends Migration
             $table->index(['projector_name', 'stream']);
         });
     }
-
-    public function down()
-    {
-        Schema::dropIfExists('projector_statuses');
-    }
 }

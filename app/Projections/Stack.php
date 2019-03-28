@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Projections;
 
 use App\Support\HasUuid;
 use Illuminate\Database\Eloquent\Model;

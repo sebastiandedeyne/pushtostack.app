@@ -177,6 +177,8 @@ return [
         App\Providers\TelescopeServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        App\Services\Scraper\ScraperServiceProvider::class,
+
     ],
 
     /*

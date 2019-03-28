@@ -1,14 +1,27 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Stack from "./Stack";
 
-export default function App({ basePath, initialStacks }) {
+export default function App({ initialStacks }) {
+    const [stacks, setStacks] = useState(initialStacks);
     const [selectedStackUuid, setSelectedStackUuid] = useState(initialStacks[0].uuid);
+
+    function updateStack(newStack) {
+        setStacks(stacks => {
+            return stacks.map(stack => {
+                if (stack.uuid === newStack.uuid) {
+                    return newStack;
+                }
+
+                return stack;
+            });
+        });
+    }
 
     return (
         <div className="w-full h-screen flex">
             <nav className="w-1/5 py-3 px-3 bg-gray-100 border-r border-gray-200">
                 <ul>
-                    {initialStacks.map(stack => (
+                    {stacks.map(stack => (
                         <li key={stack.uuid}>
                             <a
                                 href="#"
@@ -25,7 +38,7 @@ export default function App({ basePath, initialStacks }) {
                 </ul>
             </nav>
             <div className="flex-1 py-2">
-                <Stack uuid={selectedStackUuid} />
+                <Stack uuid={selectedStackUuid} onUpdate={updateStack} />
             </div>
         </div>
     );

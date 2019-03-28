@@ -2,7 +2,7 @@
 
 namespace App\Scopes;
 
-use App\User;
+use App\Projections\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;

@@ -11,27 +11,17 @@ class CreateLinksTable extends Migration
         Schema::create('links', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->uuid('uuid');
-            $table->string('url');
-            $table->string('domain');
-            $table->string('title');
-            $table->text('favicon_url')->nullable();
+            $table->string('url', 1000);
+            $table->string('host');
+            $table->string('title', 1000);
+            $table->string('favicon_url')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('stack_id');
             $table->string('stack_uuid')->index();
-            $table->timestamp('added_at');
+            $table->dateTime('added_at');
 
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('stack_id')->references('id')->on('stacks');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('stack_id')->references('id')->on('stacks')->onDelete('cascade');
         });
-    }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::dropIfExists('link');
     }
 }

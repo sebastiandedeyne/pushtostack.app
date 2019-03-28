@@ -3,7 +3,7 @@
 namespace App\Projectors;
 
 use App\Events\UserRegistered;
-use App\User;
+use App\Projections\User;
 use Spatie\EventProjector\Projectors\Projector;
 use Spatie\EventProjector\Projectors\ProjectsEvents;
 
@@ -15,7 +15,7 @@ class UsersProjector implements Projector
         UserRegistered::class,
     ];
 
-    public function onUserRegistered(UserRegistered $event)
+    public function onUserRegistered(UserRegistered $event): void
     {
         User::create([
             'uuid' => $event->user_uuid,
@@ -27,5 +27,15 @@ class UsersProjector implements Projector
             'name' => 'Inbox',
             'order' => 1,
         ]);
+    }
+
+    public function streamEventsBy(): string
+    {
+        return 'user_uuid';
+    }
+
+    public function mustReceiveAllPriorEventsBeforeProjecting(): bool
+    {
+        return false;
     }
 }

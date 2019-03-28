@@ -1,11 +1,11 @@
 <?php
 
-namespace App;
+namespace App\Projections;
 
+use App\Support\HasUuid;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use App\Support\HasUuid;
 
 class User extends Authenticatable
 {
@@ -27,6 +27,11 @@ class User extends Authenticatable
     public function stacks(): HasMany
     {
         return $this->hasMany(Stack::class);
+    }
+
+    public function getInboxAttribute(): Stack
+    {
+        return $this->stacks->first();
     }
 
     public function links(): HasMany

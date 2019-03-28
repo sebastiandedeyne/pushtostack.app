@@ -8,8 +8,8 @@ use Spatie\EventProjector\ShouldBeStored;
 class FaviconFetched extends DataTransferObject implements ShouldBeStored
 {
     /** @var string */
-    public $link_uuid;
+    public $host;
 
     /** @var string */
-    public $url;
+    public $filename;
 }

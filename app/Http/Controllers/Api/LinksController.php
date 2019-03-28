@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 use App\Events\LinkAdded;
+use App\Events\LinkDeleted;
 use App\Http\Controllers\Controller;
-use App\Link;
-use App\Stack;
+use App\Projections\Link;
+use App\Projections\Stack;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class LinksController extends Controller
@@ -24,7 +26,13 @@ class LinksController extends Controller
     public function store(Request $request)
     {
         $attributes = $request->validate([
-            'url' => 'required|url',
+            'url' => ['required', 'url'],
+            'stack_uuid' => [
+                'uuid',
+                Rule::exists('stacks', 'uuid')->where(function ($query) use ($request) {
+                    $query->where('user_id', $request->user()->id);
+                }),
+            ],
         ]);
 
         $linkUuid = uuid();
@@ -32,7 +40,7 @@ class LinksController extends Controller
         event(new LinkAdded([
             'link_uuid' => $linkUuid,
             'user_uuid' => $request->user()->uuid,
-            'stack_uuid' => Stack::first()->uuid,
+            'stack_uuid' => $attributes['stack_uuid'] ?? $request->user()->inbox->uuid,
             'url' => $attributes['url'],
             'title' => null,
             'added_at' => Carbon::now()->toDateTimeString(),
@@ -56,8 +64,12 @@ class LinksController extends Controller
         //
     }
 
-    public function destroy($id)
+    public function destroy(string $uuid)
     {
-        //
+        $this->authorize('delete', Link::findByUuid($uuid));
+
+        event(new LinkDeleted([
+            'link_uuid' => $uuid,
+        ]));
     }
 }

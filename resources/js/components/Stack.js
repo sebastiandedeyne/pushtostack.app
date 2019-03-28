@@ -1,25 +1,29 @@
 import { useEffect, useState } from "react";
 
-export default function Stack({ uuid }) {
-    const [newLinks, setNewLinks] = useState(["https://spatie.be"]);
+export default function Stack({ uuid, onUpdate }) {
+    const [newLinks, setNewLinks] = useState([""]);
     const [links, setLinks] = useState([]);
 
     useEffect(() => {
         fetch(`/api/links?filter[stack_uuid]=${uuid}`)
             .then(res => res.json())
             .then(res => setLinks(res.data));
+    }, [uuid]);
 
-        window.Echo.private(`stacks.${uuid}`).listen(".title_fetched", ({ link_uuid, title }) => {
-            setLinks(links =>
-                links.map(link => {
-                    if (link.uuid !== link_uuid) {
+    useEffect(() => {
+        window.Echo.private(`stacks.${uuid}`)
+            .listen("BroadcastLinkUpdated", updatedLink => {
+                setLinks(links => {
+                    return links.map(link => {
+                        if (link.uuid === updatedLink.uuid) {
+                            return updatedLink;
+                        }
+
                         return link;
-                    }
-
-                    return { ...link, title };
-                })
-            );
-        });
+                    });
+                });
+            })
+            .listen("BroadcastStackUpdated", onUpdate);
 
         return () => window.Echo.leaveChannel(`.stacks.${uuid}`);
     }, [uuid]);
@@ -29,7 +33,7 @@ export default function Stack({ uuid }) {
 
         fetch("/api/links", {
             method: "POST",
-            body: JSON.stringify({ url: newLinks[0] }),
+            body: JSON.stringify({ url: newLinks[0], stack_uuid: uuid }),
             headers: {
                 "Content-Type": "application/json",
                 Accept: "application/json, text-plain, */*",
@@ -39,8 +43,23 @@ export default function Stack({ uuid }) {
             .then(res => res.json())
             .then(link => {
                 setLinks([link, ...links]);
-                setNewLinks(["https://spatie.be"]);
+                setNewLinks([""]);
             });
+    }
+
+    function deleteLink(uuid) {
+        fetch(`/api/links/${uuid}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json, text-plain, */*",
+                "X-Requested-With": "XMLHttpRequest"
+            }
+        }).then(() => {
+            setLinks(links => {
+                return links.filter(link => link.uuid !== uuid);
+            });
+        });
     }
 
     return (
@@ -59,8 +78,8 @@ export default function Stack({ uuid }) {
                 </form>
             </li>
             {links.map(link => (
-                <li key={link.uuid}>
-                    <a className="block pl-6 py-2" href={link.url} target="_blank" rel="nofollow">
+                <li key={link.uuid} className="flex">
+                    <a className="flex-1 block pl-6 py-2" href={link.url} target="_blank" rel="nofollow">
                         {link.favicon_url ? (
                             <img
                                 src={link.favicon_url}
@@ -74,8 +93,9 @@ export default function Stack({ uuid }) {
                             />
                         )}
                         <span className="font-medium text-gray-900">{link.title}</span>{" "}
-                        <span className="inline-block text-gray-600"> – {link.domain}</span>
+                        <span className="inline-block text-gray-600"> – {link.host}</span>
                     </a>
+                    <button onClick={() => deleteLink(link.uuid)}>Delete</button>
                 </li>
             ))}
         </ul>

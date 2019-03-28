@@ -18,9 +18,4 @@ class CreateStoredEventsTable extends Migration
             $table->index('event_class');
         });
     }
-
-    public function down()
-    {
-        Schema::dropIfExists('stored_events');
-    }
 }
