@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Events\Broadcast;
+namespace App\Events\Broadcasts;
 
 use App\Projections\Link;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class BroadcastLinkUpdated implements ShouldBroadcast
+class LinkCreated implements ShouldBroadcast
 {
     /** @var \App\Projections\Link */
     private $link;

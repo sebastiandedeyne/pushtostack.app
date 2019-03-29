@@ -12,7 +12,7 @@ export default function Stack({ uuid, onUpdate }) {
 
     useEffect(() => {
         window.Echo.private(`stacks.${uuid}`)
-            .listen("BroadcastLinkUpdated", updatedLink => {
+            .listen("LinkUpdated", updatedLink => {
                 setLinks(links => {
                     return links.map(link => {
                         if (link.uuid === updatedLink.uuid) {
@@ -23,7 +23,7 @@ export default function Stack({ uuid, onUpdate }) {
                     });
                 });
             })
-            .listen("BroadcastStackUpdated", onUpdate);
+            .listen("StackUpdated", onUpdate);
 
         return () => window.Echo.leaveChannel(`.stacks.${uuid}`);
     }, [uuid]);

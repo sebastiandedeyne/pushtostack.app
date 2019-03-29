@@ -2,6 +2,9 @@
 
 namespace App\Projections;
 
+use App\Events\Broadcasts\LinkCreated;
+use App\Events\Broadcasts\LinkDeleted;
+use App\Events\Broadcasts\LinkUpdated;
 use App\Support\HasUuid;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -21,6 +24,23 @@ class Link extends Model
     protected $casts = [
         'added_at' => 'datetime',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        self::created(function (self $link) {
+            event(new LinkCreated($link));
+        });
+
+        self::updated(function (self $link) {
+            event(new LinkUpdated($link));
+        });
+
+        self::deleted(function (self $link) {
+            event(new LinkDeleted($link->uuid, $link->stack_uuid));
+        });
+    }
 
     public function stack(): BelongsTo
     {

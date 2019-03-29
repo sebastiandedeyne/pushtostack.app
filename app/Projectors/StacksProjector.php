@@ -2,9 +2,6 @@
 
 namespace App\Projectors;
 
-use App\Events\Broadcast\BroadcastLinkUpdated;
-use App\Events\Broadcast\BroadcastStackUpdated;
-use App\Events\BroadcastLinkDeleted;
 use App\Events\FaviconFetched;
 use App\Events\LinkAdded;
 use App\Events\LinkDeleted;
@@ -76,11 +73,8 @@ class StacksProjector implements Projector
 
     public function onTitleFetched(TitleFetched $event): void
     {
-        $link = Link::findByUuid($event->link_uuid);
-
-        $link->update(['title' => $event->title]);
-
-        event(new BroadcastLinkUpdated($link));
+        Link::findByUuid($event->link_uuid)
+            ->update(['title' => $event->title]);
     }
 
     public function onFaviconFetched(FaviconFetched $event): void
@@ -88,8 +82,6 @@ class StacksProjector implements Projector
         Link::where('host', $event->host)
             ->each(function (Link $link) use ($event) {
                 $link->update(['favicon_url' => url("storage/favicons/{$event->filename}")]);
-
-                event(new BroadcastLinkUpdated($link));
             });
     }
 

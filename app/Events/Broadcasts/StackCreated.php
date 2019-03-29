@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Events\Broadcast;
+namespace App\Events\Broadcasts;
 
 use App\Projections\Stack;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class BroadcastStackUpdated implements ShouldBroadcast
+class StackCreated implements ShouldBroadcast
 {
     /** @var \App\Projections\Stack */
     private $stack;
