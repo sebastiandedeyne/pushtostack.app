@@ -2,16 +2,16 @@
 
 namespace App\Http\Middleware;
 
-use App\Projections\Link;
-use App\Scopes\UserScope;
-use App\Projections\Stack;
+use App\Domain\Stack\Models\Link;
+use App\Domain\Stack\Models\Stack;
+use App\Domain\Stack\Scopes\UserScope;
 use Closure;
 
 class CurrentUserScope
 {
     public function handle($request, Closure $next)
     {
-        $userScope = new UserScope($request->user());
+        $userScope = new UserScope($request->user()->uuid);
 
         Link::addGlobalScope($userScope);
         Stack::addGlobalScope($userScope);

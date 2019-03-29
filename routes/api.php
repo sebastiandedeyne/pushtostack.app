@@ -14,6 +14,6 @@ use App\Http\Middleware\CurrentUserScope;
 */
 
 Route::middleware('auth', CurrentUserScope::class)->group(function () {
-    Route::resource('links', 'LinksController');
+    Route::resource('links', 'LinksController', ['only' => ['index', 'store', 'destroy']]);
 });
 

@@ -35,7 +35,7 @@ return [
     ],
 
     'stripe' => [
-        'model' => App\Projections\User::class,
+        'model' => App\Domain\User\Models\User::class,
         'key' => env('STRIPE_KEY'),
         'secret' => env('STRIPE_SECRET'),
         'webhook' => [

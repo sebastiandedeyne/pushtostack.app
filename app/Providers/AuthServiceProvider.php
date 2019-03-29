@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Projections\Link;
+use App\Domain\Stack\Models\Link;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use App\Policies\LinkPolicy;
 
@@ -13,9 +13,7 @@ class AuthServiceProvider extends ServiceProvider
      *
      * @var array
      */
-    protected $policies = [
-        Link::class => LinkPolicy::class,
-    ];
+    protected $policies = [];
 
     /**
      * Register any authentication / authorization services.

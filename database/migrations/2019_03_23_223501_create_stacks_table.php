@@ -14,9 +14,7 @@ class CreateStacksTable extends Migration
             $table->string('name');
             $table->unsignedInteger('order');
             $table->unsignedInteger('link_count')->default(0);
-            $table->unsignedBigInteger('user_id');
-
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->uuid('user_uuid')->index();
         });
     }
 }

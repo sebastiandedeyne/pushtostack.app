@@ -8,8 +8,8 @@ return [
      * can be registered in this array or a service provider.
      */
     'projectors' => [
-        App\Projectors\StacksProjector::class,
-        App\Projectors\UsersProjector::class,
+        App\Domain\Stack\Projectors\StacksProjector::class,
+        App\Domain\User\Projectors\UsersProjector::class,
     ],
 
     /*
@@ -18,7 +18,8 @@ return [
      * can be registered in this array or a service provider.
      */
     'reactors' => [
-        App\Reactors\StacksReactor::class,
+        App\Domain\Stack\Reactors\BroadcastReactor::class,
+        App\Domain\Stack\Reactors\ScrapeReactor::class,
     ],
 
     /*

@@ -1,10 +1,10 @@
 <?php
 
-use App\Events\LinkAdded;
-use App\Events\StackCreated;
-use App\Events\UserRegistered;
-use App\Projections\Stack;
-use App\Projections\User;
+use App\Domain\Stack\LinkAdded;
+use App\Domain\Stack\Models\Stack;
+use App\Domain\Stack\StackCreated;
+use App\Domain\User\Models\User;
+use App\Domain\User\UserRegistered;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
 
@@ -95,7 +95,7 @@ class DatabaseSeeder extends Seeder
                     'stack_uuid' => uuid(),
                     'user_uuid' => $user->uuid,
                     'name' => $stackName,
-                    'order' => $user->stacks()->max('order') + 1,
+                    'order' => Stack::where('user_uuid', $user->uuid)->max('order') + 1,
                 ]));
 
                 $stack = Stack::where('name', $stackName)->firstOrFail();
@@ -103,7 +103,6 @@ class DatabaseSeeder extends Seeder
 
             event(new LinkAdded([
                 'link_uuid' => uuid(),
-                'user_uuid' => $user->uuid,
                 'stack_uuid' => $stack->uuid,
                 'url' => $url,
                 'title' => null,

@@ -3,7 +3,7 @@
 namespace Tests;
 
 use App\Events\UserRegistered;
-use App\Projections\User;
+use App\Domain\User\Models\User;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithContainer;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use App\Services\Scraper\Scraper;
@@ -14,7 +14,7 @@ abstract class TestCase extends BaseTestCase
     use CreatesApplication;
     use InteractsWithContainer;
 
-    /** @var \App\Projections\User */
+    /** @var \App\Domain\User\Models\User */
     protected $user;
 
     public function setUp(): void

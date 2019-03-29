@@ -12,7 +12,7 @@ export default function Stack({ uuid, onUpdate }) {
 
     useEffect(() => {
         window.Echo.private(`stacks.${uuid}`)
-            .listen("LinkUpdated", updatedLink => {
+            .listen(".link_updated", updatedLink => {
                 setLinks(links => {
                     return links.map(link => {
                         if (link.uuid === updatedLink.uuid) {
@@ -23,7 +23,7 @@ export default function Stack({ uuid, onUpdate }) {
                     });
                 });
             })
-            .listen("StackUpdated", onUpdate);
+            .listen(".stack_updated", onUpdate);
 
         return () => window.Echo.leaveChannel(`.stacks.${uuid}`);
     }, [uuid]);
@@ -79,7 +79,7 @@ export default function Stack({ uuid, onUpdate }) {
             </li>
             {links.map(link => (
                 <li key={link.uuid} className="flex">
-                    <a className="flex-1 block pl-6 py-2" href={link.url} target="_blank" rel="nofollow">
+                    <a className="flex-1 flex items-center pl-6 py-2" href={link.url} target="_blank" rel="nofollow">
                         {link.favicon_url ? (
                             <img
                                 src={link.favicon_url}
@@ -87,13 +87,10 @@ export default function Stack({ uuid, onUpdate }) {
                                 className="inline-block w-5 h-5 rounded mr-3"
                             />
                         ) : (
-                            <span
-                                className="inline-block w-5 h-5 bg-gray-300 rounded mr-3"
-                                style={{ transform: "translateY(0.225em)" }}
-                            />
+                            <span className="inline-block w-5 h-5 bg-gray-300 rounded mr-3" />
                         )}
                         <span className="font-medium text-gray-900">{link.title}</span>{" "}
-                        <span className="inline-block text-gray-600"> – {link.host}</span>
+                        <span className="inline-block text-gray-600">&nbsp;–&nbsp;{link.host}</span>
                     </a>
                     <button onClick={() => deleteLink(link.uuid)}>Delete</button>
                 </li>

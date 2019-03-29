@@ -1,6 +1,6 @@
 <?php
 
-use App\Projections\User;
+use App\Domain\User\Models\User;
 use Illuminate\Support\Str;
 use Faker\Generator as Faker;
 

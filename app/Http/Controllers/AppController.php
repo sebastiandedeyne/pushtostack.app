@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Projections\Stack;
+use App\Domain\Stack\Models\Stack;
 use Illuminate\Http\Request;
 
 class AppController extends Controller

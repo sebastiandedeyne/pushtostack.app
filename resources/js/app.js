@@ -8,8 +8,7 @@ window.Pusher = Pusher;
 window.Echo = new Echo({
     broadcaster: "pusher",
     key: "f7082fa522418c67f533",
-    cluster: "eu",
-    namespace: "App.Events.Broadcasts"
+    cluster: "eu"
 });
 
 const container = document.getElementById("app");

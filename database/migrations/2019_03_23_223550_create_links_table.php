@@ -15,12 +15,11 @@ class CreateLinksTable extends Migration
             $table->string('host');
             $table->string('title', 1000);
             $table->string('favicon_url')->nullable();
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('stack_id');
-            $table->string('stack_uuid')->index();
             $table->dateTime('added_at');
 
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->uuid('user_uuid')->index();
+            $table->uuid('stack_uuid')->index();
+            $table->unsignedBigInteger('stack_id');
             $table->foreign('stack_id')->references('id')->on('stacks')->onDelete('cascade');
         });
     }

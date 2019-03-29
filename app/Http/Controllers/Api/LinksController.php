@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Events\LinkAdded;
-use App\Events\LinkDeleted;
+use App\Domain\Stack\LinkAdded;
+use App\Domain\Stack\LinkDeleted;
+use App\Domain\Stack\Models\Link;
+use App\Domain\Stack\Models\Stack;
 use App\Http\Controllers\Controller;
-use App\Projections\Link;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
@@ -28,17 +29,20 @@ class LinksController extends Controller
             'stack_uuid' => [
                 'uuid',
                 Rule::exists('stacks', 'uuid')->where(function ($query) use ($request) {
-                    $query->where('user_id', $request->user()->id);
+                    $query->where('user_uuid', $request->user()->uuid);
                 }),
             ],
         ]);
 
         $linkUuid = uuid();
 
+        $stackUuid = isset($attributes['stack_uuid'])
+            ? $attributes['stack_uuid']
+            : Stack::getInbox($request->user()->uuid)->uuid;
+
         event(new LinkAdded([
             'link_uuid' => $linkUuid,
-            'user_uuid' => $request->user()->uuid,
-            'stack_uuid' => $attributes['stack_uuid'] ?? $request->user()->inbox->uuid,
+            'stack_uuid' => $stackUuid,
             'url' => $attributes['url'],
             'title' => null,
             'added_at' => Carbon::now()->toDateTimeString(),
@@ -47,25 +51,8 @@ class LinksController extends Controller
         return Link::findByUuid($linkUuid);
     }
 
-    public function show($id)
-    {
-        //
-    }
-
-    public function edit($id)
-    {
-        //
-    }
-
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
     public function destroy(string $uuid)
     {
-        $this->authorize('delete', Link::findByUuid($uuid));
-
         event(new LinkDeleted([
             'link_uuid' => $uuid,
         ]));
