@@ -53,11 +53,11 @@ class DatabaseSeeder extends Seeder
         ],
         [
             'https://reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html',
-            'Programming',
+            'Programming/JavaScript',
         ],
         [
             'https://simonkollross.de/posts/vuejs-using-v-model-with-objects-for-custom-components',
-            'Programming',
+            'Programming/JavaScript',
         ],
         [
             'https://spacecraft.ssl.umd.edu/akins_laws.html',
@@ -65,11 +65,11 @@ class DatabaseSeeder extends Seeder
         ],
         [
             'https://icidasset.com/writings/building-blocks/',
-            'Programming',
+            'Programming/FP',
         ],
         [
             'https://medium.com/startupwatching/i-emptied-my-savings-to-buy-a-newsletter-35508bf1c810',
-            'Programming',
+            'Business',
         ],
         [
             'https://csswizardry.com/2017/10/airplanes-and-ashtrays/',
@@ -89,11 +89,20 @@ class DatabaseSeeder extends Seeder
 
         $user = User::findByUuid($userUuid);
 
-        foreach ($this->links as [$url, $stackName]) {
-            if (!$stack = Stack::where('name', $stackName)->first()) {
+        foreach ($this->links as [$url, $stackPath]) {
+            $stackParts = explode('/', $stackPath);
+
+            $stackName = $stackParts[0];
+            $stack = Stack::where('name', $stackName)->first();
+
+            $subStackName = $stackParts[1] ?? "";
+            $subStack = $subStackName ? Stack::where('name', $subStackName)->first() : null;
+
+            if (!$stack) {
                 event(new StackCreated([
                     'stack_uuid' => uuid(),
                     'user_uuid' => $user->uuid,
+                    'parent_uuid' => null,
                     'name' => $stackName,
                     'order' => Stack::where('user_uuid', $user->uuid)->max('order') + 1,
                 ]));
@@ -101,9 +110,21 @@ class DatabaseSeeder extends Seeder
                 $stack = Stack::where('name', $stackName)->firstOrFail();
             }
 
+            if ($subStackName && !$subStack) {
+                event(new StackCreated([
+                    'stack_uuid' => uuid(),
+                    'user_uuid' => $user->uuid,
+                    'parent_uuid' => $stack->uuid,
+                    'name' => $subStackName,
+                    'order' => Stack::where('user_uuid', $user->uuid)->max('order') + 1,
+                ]));
+
+                $subStack = Stack::where('name', $subStackName)->firstOrFail();
+            }
+
             event(new LinkAdded([
                 'link_uuid' => uuid(),
-                'stack_uuid' => $stack->uuid,
+                'stack_uuid' => $subStack ? $subStack->uuid : $stack->uuid,
                 'url' => $url,
                 'title' => null,
                 'added_at' => Carbon::now()->toDateTimeString(),

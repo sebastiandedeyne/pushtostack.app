@@ -44,6 +44,7 @@ class StacksProjector implements Projector
             'uuid' => $event->stack_uuid,
             'name' => $event->name,
             'order' => $event->order,
+            'parent_uuid' => $event->parent_uuid,
             'user_uuid' => $event->user_uuid,
         ]);
     }

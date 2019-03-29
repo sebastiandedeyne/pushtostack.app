@@ -9,6 +9,9 @@ class StackCreated extends DomainEvent
     /** @var string */
     public $stack_uuid;
 
+    /** @var string|null */
+    public $parent_uuid;
+
     /** @var string */
     public $user_uuid;
 

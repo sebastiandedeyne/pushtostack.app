@@ -11,6 +11,7 @@ class CreateStacksTable extends Migration
         Schema::create('stacks', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->uuid('uuid');
+            $table->uuid('parent_uuid')->nullable();
             $table->string('name');
             $table->unsignedInteger('order');
             $table->unsignedInteger('link_count')->default(0);
