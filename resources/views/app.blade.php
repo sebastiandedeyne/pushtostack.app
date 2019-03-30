@@ -7,7 +7,7 @@
 @section('content')
     <div
         id="app"
-        data-base-path="{{ url('app') }}"
-        data-initial-stacks="{{ json_encode($stacks) }}"
+        data-stacks="{{ json_encode($stacks) }}"
+        data-user-uuid="{{ Auth::user()->uuid }}"
     ></div>
 @endsection

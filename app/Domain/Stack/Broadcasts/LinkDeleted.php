@@ -2,26 +2,21 @@
 
 namespace App\Domain\Stack\Broadcasts;
 
-use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use App\Domain\Stack\Broadcasts\Concerns\BroadcastsOnLinkChangesInStack;
 
 class LinkDeleted implements ShouldBroadcast
 {
-    /** @var string */
-    private $linkUuid;
+    use BroadcastsOnLinkChangesInStack;
 
     /** @var string */
-    private $stackUuid;
+    private $linkUuid;
 
     public function __construct(string $linkUuid, string $stackUuid)
     {
         $this->linkUuid = $linkUuid;
-        $this->stackUuid = $stackUuid;
-    }
 
-    public function broadcastOn()
-    {
-        return new PrivateChannel("stacks.{$this->stackUuid}");
+        $this->stackUuid = $stackUuid;
     }
 
     public function broadcastWith()

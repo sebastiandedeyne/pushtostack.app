@@ -11,6 +11,10 @@
 |
 */
 
-Broadcast::channel('stacks.{stack_uuid}', function () {
+Broadcast::channel('stack_changes_for_user_{user_uuid}', function () {
+    return true;
+});
+
+Broadcast::channel('link_changes_in_stack_{stack_uuid}', function () {
     return true;
 });

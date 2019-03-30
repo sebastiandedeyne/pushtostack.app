@@ -1,4 +1,4 @@
-const mix = require('laravel-mix');
+const mix = require("laravel-mix");
 
 /*
  |--------------------------------------------------------------------------
@@ -11,8 +11,6 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.react('resources/js/app.js', 'public/js')
-   .postCss('resources/css/app.css', 'public/css', [require('tailwindcss')()])
-   .autoload({
-       react: ['React'],
-   });
+mix
+  .ts("resources/js/app.tsx", "public/js")
+  .postCss("resources/css/app.css", "public/css", [require("tailwindcss")()]);

@@ -2,22 +2,21 @@
 
 namespace App\Domain\Stack\Broadcasts;
 
-use Illuminate\Broadcasting\PrivateChannel;
+use App\Domain\Stack\Broadcasts\Concerns\BroadcastsOnStackChangesForUser;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
 class StackDeleted implements ShouldBroadcast
 {
+    use BroadcastsOnStackChangesForUser;
+
     /** @var string */
     private $stackUuid;
 
-    public function __construct(string $stackUuid)
+    public function __construct(string $stackUuid, string $userUuid)
     {
         $this->stackUuid = $stackUuid;
-    }
 
-    public function broadcastOn()
-    {
-        return new PrivateChannel("stacks.{$this->stackUuid}");
+        $this->userUuid = $userUuid;
     }
 
     public function broadcastWith()
