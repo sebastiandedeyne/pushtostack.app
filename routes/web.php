@@ -1,7 +1,5 @@
 <?php
 
-use App\Http\Middleware\CurrentUserScope;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -19,6 +17,6 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::middleware('auth', CurrentUserScope::class)->group(function () {
+Route::middleware('auth')->group(function () {
     Route::get('app', 'AppController');
 });

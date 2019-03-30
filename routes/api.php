@@ -1,7 +1,5 @@
 <?php
 
-use App\Http\Middleware\CurrentUserScope;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -13,7 +11,7 @@ use App\Http\Middleware\CurrentUserScope;
 |
 */
 
-Route::middleware('auth', CurrentUserScope::class)->group(function () {
+Route::middleware('auth')->group(function () {
     Route::resource('links', 'LinksController', ['only' => ['index', 'store', 'destroy']]);
 });
 

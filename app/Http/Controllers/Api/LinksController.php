@@ -14,9 +14,10 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class LinksController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         return QueryBuilder::for(Link::class)
+            ->where('user_uuid', $request->user()->uuid)
             ->allowedFilters('stack_uuid')
             ->latest('added_at')
             ->paginate();
@@ -51,8 +52,12 @@ class LinksController extends Controller
         return Link::findByUuid($linkUuid);
     }
 
-    public function destroy(string $uuid)
+    public function destroy(Request $request, string $uuid)
     {
+        if (! Link::findByUuid($uuid)->user_uuid === $request->user()->uuid) {
+            abort(404);
+        }
+
         event(new LinkDeleted([
             'link_uuid' => $uuid,
         ]));
