@@ -19,21 +19,21 @@ export default function StackIndex({ stacks, active, onStackClick }: Props) {
 
   return (
     <>
-      <ul>
+      <ul className="mt-12">
         {parentStacks.map(stack => (
           <Fragment key={stack.uuid}>
             <StackIndexItem
               key={stack.uuid}
-              active={stack.uuid === active}
               onClick={() => onStackClick(stack.uuid)}
+              isActive={stack.uuid === active}
               {...stack}
             />
             {stack.children.map(stack => (
               <StackIndexItem
                 key={stack.uuid}
-                active={stack.uuid === active}
                 onClick={() => onStackClick(stack.uuid)}
-                className="ml-6"
+                isActive={stack.uuid === active}
+                isSubStack
                 {...stack}
               />
             ))}

@@ -14,6 +14,8 @@ export default function App({ stacks: initialStacks, userUuid }: Props) {
   const [stacks, setStacks] = useState(initialStacks);
   const [activeStackUuid, setActiveStackUuid] = useState(initialStacks[0].uuid);
 
+  const activeStack = stacks.find(stack => stack.uuid === activeStackUuid);
+
   useStackChangesForUser(userUuid, (updatedStack: Stack) => {
     setStacks(stacks => {
       return stacks.map(stack => {
@@ -51,17 +53,28 @@ export default function App({ stacks: initialStacks, userUuid }: Props) {
   }
 
   return (
-    <div className="w-full h-screen flex">
-      <nav className="w-1/5 bg-gray-100 border-r border-gray-200 py-3 px-3">
+    <div className="p-6 mx-auto max-w-6xl w-full flex">
+      <nav className="w-48 text-sm">
         <StackIndex stacks={stacks} active={activeStackUuid} onStackClick={setActiveStackUuid} />
       </nav>
-      <div className="flex-1 py-2">
-        <StackDetail
-          stackUuid={activeStackUuid}
-          onLinkAdded={incrementActiveStackLinkCount}
-          onLinkDeleted={decrementActiveStackLinkCount}
-        />
+      <div className="flex-1 mx-8">
+        <div className="max-w-4xl">
+          {activeStack ? (
+            <StackDetail
+              stack={activeStack}
+              onLinkAdded={incrementActiveStackLinkCount}
+              onLinkDeleted={decrementActiveStackLinkCount}
+            />
+          ) : null}
+        </div>
       </div>
+      <nav className="w-48">
+        <ul>
+          <li>Feeds</li>
+          <li>Settings</li>
+          <li>Log out</li>
+        </ul>
+      </nav>
     </div>
   );
 }

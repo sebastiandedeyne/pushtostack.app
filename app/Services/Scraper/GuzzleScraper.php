@@ -28,6 +28,7 @@ class GuzzleScraper implements Scraper
     public function getFaviconUrl(string $url): string
     {
         $faviconNodes = $this->getCrawler($url)->filter(implode(', ', [
+            'head > link[rel="apple-touch-icon"]',
             'head > link[rel="shortcut icon"]',
             'head > link[rel="icon"]',
         ]));

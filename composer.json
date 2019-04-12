@@ -19,7 +19,7 @@
         "pusher/pusher-php-server": "~3.0",
         "spatie/data-transfer-object": "^1.8",
         "spatie/image": "^1.7",
-        "spatie/laravel-event-projector": "^1.3",
+        "spatie/laravel-event-projector": "^2.0",
         "spatie/laravel-query-builder": "^1.17",
         "spatie/url": "^1.3",
         "symfony/dom-crawler": "^4.2"

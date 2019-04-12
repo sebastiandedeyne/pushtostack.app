@@ -2,29 +2,34 @@ import * as React from "react";
 import { Stack } from "../index.d";
 
 type Props = Stack & {
-  active: boolean;
+  isActive?: boolean;
+  isSubStack?: boolean;
   onClick: () => void;
-  className?: string;
 };
 
 export default function StackIndexItem({
   name,
   link_count,
-  active,
-  onClick,
-  className = ""
+  isActive = false,
+  isSubStack = false,
+  onClick
 }: Props) {
   return (
     <li>
       <a
         href="#"
-        className={`flex items-center justify-between px-3 py-2 mb-1 rounded ${className} ${
-          active ? "text-blue-600 bg-gray-200" : "text-gray-700"
+        className={`flex items-center py-1 mb-1 rounded ${isSubStack ? "ml-6" : ""} ${
+          isActive ? "text-blue-600" : "text-gray-700"
         }`}
         onClick={onClick}
       >
+        <i
+          className={`${isActive ? "" : "text-gray-400"} ${
+            isSubStack ? "fa fa-hashtag w-5" : "fa fa-layer-group w-6"
+          }`}
+        />
         <span className="font-semibold">{name}</span>{" "}
-        <span className="text-sm text-gray-600">{link_count}</span>
+        <span className="text-xs text-gray-500 ml-2 mt-1">{link_count}</span>
       </a>
     </li>
   );
