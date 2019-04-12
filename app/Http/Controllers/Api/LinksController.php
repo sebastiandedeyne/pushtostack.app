@@ -18,7 +18,6 @@ class LinksController extends Controller
     {
         return QueryBuilder::for(Link::class)
             ->where('user_uuid', $request->user()->uuid)
-            ->allowedFilters('stack_uuid')
             ->latest('added_at')
             ->paginate();
     }

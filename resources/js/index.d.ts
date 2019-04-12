@@ -1,7 +1,15 @@
 export type Stack = {
   uuid: string;
-  parent_uuid: string;
   name: string;
+  slug: string;
+  order: number;
+  link_count: number;
+};
+
+export type Tag = {
+  uuid: string;
+  name: string;
+  slug: string;
   order: number;
   link_count: number;
 };

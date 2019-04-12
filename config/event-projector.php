@@ -18,7 +18,6 @@ return [
      * can be registered in this array or a service provider.
      */
     'reactors' => [
-        App\Domain\Stack\Reactors\BroadcastReactor::class,
         App\Domain\Stack\Reactors\ScrapeReactor::class,
     ],
 

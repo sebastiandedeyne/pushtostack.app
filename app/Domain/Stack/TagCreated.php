@@ -4,10 +4,10 @@ namespace App\Domain\Stack;
 
 use App\Support\DomainEvent;
 
-class StackCreated extends DomainEvent
+class TagCreated extends DomainEvent
 {
     /** @var string */
-    public $stack_uuid;
+    public $tag_uuid;
 
     /** @var string */
     public $user_uuid;

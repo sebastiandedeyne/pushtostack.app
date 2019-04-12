@@ -20,8 +20,8 @@ async function request(method: Method, url: string, data: {} | null = null) {
   return response;
 }
 
-export async function getLinks(stackUuid: string): Promise<Array<Link>> {
-  const response = await request("GET", `/api/links?filter[stack_uuid]=${stackUuid}`);
+export async function search(query: string): Promise<Array<Link>> {
+  const response = await request("GET", `/api/links?filter[search]=${query}`);
   const { data } = await response.json();
 
   return data;

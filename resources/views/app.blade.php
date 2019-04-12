@@ -9,6 +9,7 @@
     <div
         id="app"
         data-stacks="{{ json_encode($stacks) }}"
+        data-tags="{{ json_encode($tags) }}"
         data-user-uuid="{{ Auth::user()->uuid }}"
     ></div>
 @endsection

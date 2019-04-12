@@ -2,10 +2,13 @@
 
 use App\Domain\Stack\LinkAdded;
 use App\Domain\Stack\Models\Stack;
+use App\Domain\Stack\Models\Tag;
 use App\Domain\Stack\StackCreated;
+use App\Domain\Stack\TagCreated;
 use App\Domain\User\Models\User;
 use App\Domain\User\UserRegistered;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 
 class DatabaseSeeder extends Seeder
@@ -14,66 +17,82 @@ class DatabaseSeeder extends Seeder
         [
             'https://programmingisterrible.com/post/173883533613/code-to-debug',
             'Programming',
+            [],
         ],
         [
             'http://robnapier.net/go-is-a-shop-built-jig',
             'Programming',
+            ['Go'],
         ],
         [
             'https://natashaskitchen.com/persimmon-bread-recipe/',
             'Recipes',
+            [],
         ],
         [
             'https://food52.com/blog/23220-fall-ginger-cake-with-apple-butter-frosting',
             'Recipes',
+            ['Dessert'],
         ],
         [
             'https://medium.learningbyshipping.com/writing-is-thinking-an-annotated-twitter-thread-2a75fe07fade?gi=c661791361ab',
             'Writing',
+            [],
         ],
         [
             'https://medium.com/thrive-global/ikigai-the-japanese-secret-to-a-long-and-happy-life-might-just-help-you-live-a-more-fulfilling-9871d01992b7',
             'Life',
+            [],
         ],
         [
             'https://medium.com/@caseorganic/why-do-we-keep-building-cars-with-touchscreens-alt-the-hidden-lives-of-touchscreens-55faf92799bf',
             'Design',
+            ['UX'],
         ],
         [
             'https://www.nytimes.com/2018/05/16/technology/moviepass-economy-startups.html',
             'Business',
+            [],
         ],
         [
             'https://frankchimero.com/blog/2016/new-yorker/',
             'Design',
+            [],
         ],
         [
             'https://www.remoteonly.org/',
             'Work',
+            [],
         ],
         [
             'https://reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html',
-            'Programming/JavaScript',
+            'Programming',
+            ['JavaScript', 'React'],
         ],
         [
             'https://simonkollross.de/posts/vuejs-using-v-model-with-objects-for-custom-components',
-            'Programming/JavaScript',
+            'Programming',
+            ['JavaScript', 'Vue'],
         ],
         [
             'https://spacecraft.ssl.umd.edu/akins_laws.html',
             'Programming',
+            [],
         ],
         [
             'https://icidasset.com/writings/building-blocks/',
-            'Programming/FP',
+            'Programming',
+            ['FP'],
         ],
         [
             'https://medium.com/startupwatching/i-emptied-my-savings-to-buy-a-newsletter-35508bf1c810',
             'Business',
+            [],
         ],
         [
             'https://csswizardry.com/2017/10/airplanes-and-ashtrays/',
             'Programming',
+            [],
         ],
     ];
 
@@ -89,42 +108,40 @@ class DatabaseSeeder extends Seeder
 
         $user = User::findByUuid($userUuid);
 
-        foreach ($this->links as [$url, $stackPath]) {
-            $stackParts = explode('/', $stackPath);
-
-            $stackName = $stackParts[0];
+        foreach ($this->links as [$url, $stackName, $tagNames]) {
             $stack = Stack::where('name', $stackName)->first();
-
-            $subStackName = $stackParts[1] ?? "";
-            $subStack = $subStackName ? Stack::where('name', $subStackName)->first() : null;
 
             if (!$stack) {
                 event(new StackCreated([
                     'stack_uuid' => uuid(),
                     'user_uuid' => $user->uuid,
-                    'parent_uuid' => null,
                     'name' => $stackName,
-                    'order' => Stack::where('user_uuid', $user->uuid)->max('order') + 1,
+                    'order' => Stack::max('order') + 1,
                 ]));
 
                 $stack = Stack::where('name', $stackName)->firstOrFail();
             }
 
-            if ($subStackName && !$subStack) {
-                event(new StackCreated([
-                    'stack_uuid' => uuid(),
-                    'user_uuid' => $user->uuid,
-                    'parent_uuid' => $stack->uuid,
-                    'name' => $subStackName,
-                    'order' => Stack::where('user_uuid', $user->uuid)->max('order') + 1,
-                ]));
+            $tags = array_map(function (string $tagName) use ($user) {
+                $tag = Tag::where('name', $tagName)->first();
 
-                $subStack = Stack::where('name', $subStackName)->firstOrFail();
-            }
+                if (!$tag) {
+                    event(new TagCreated([
+                        'tag_uuid' => uuid(),
+                        'user_uuid' => $user->uuid,
+                        'name' => $tagName,
+                        'order' => Tag::max('order') + 1,
+                    ]));
+                }
+
+                return Tag::where('name', $tagName)->first();
+            }, $tagNames);
 
             event(new LinkAdded([
                 'link_uuid' => uuid(),
-                'stack_uuid' => $subStack ? $subStack->uuid : $stack->uuid,
+                'stack_uuid' => $stack->uuid,
+                'tag_uuids' => Arr::pluck($tags, 'uuid'),
+                'user_uuid' => $userUuid,
                 'url' => $url,
                 'title' => null,
                 'added_at' => Carbon::now()->toDateTimeString(),
