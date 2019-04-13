@@ -9,7 +9,6 @@ use App\Domain\Stack\Models\Link;
 use App\Domain\Stack\Models\Stack;
 use App\Domain\Stack\Models\Tag;
 use App\Domain\Stack\StackCreated;
-use App\Domain\Stack\TagCreated;
 use App\Domain\Stack\TitleFetched;
 use App\Domain\User\UserRegistered;
 use Illuminate\Support\Str;
@@ -21,16 +20,6 @@ use Spatie\Url\Url;
 class StacksProjector implements Projector
 {
     use ProjectsEvents;
-
-    protected $handlesEvents = [
-        UserRegistered::class,
-        StackCreated::class,
-        TagCreated::class,
-        LinkAdded::class,
-        LinkDeleted::class,
-        TitleFetched::class,
-        FaviconFetched::class,
-    ];
 
     public function onUserRegistered(UserRegistered $event): void
     {
@@ -54,22 +43,9 @@ class StacksProjector implements Projector
         ]);
     }
 
-    public function onTagCreated(TagCreated $event): void
-    {
-        Tag::create([
-            'uuid' => $event->tag_uuid,
-            'name' => $event->name,
-            'slug' => Str::slug($event->name),
-            'order' => $event->order,
-            'user_uuid' => $event->user_uuid,
-        ]);
-    }
-
     public function onLinkAdded(LinkAdded $event): void
     {
         $stack = Stack::findByUuid($event->stack_uuid);
-
-        $tags = Tag::whereIn('uuid', $event->tag_uuids)->get();
 
         $host = Url::fromString($event->url)->getHost();
 
@@ -87,7 +63,7 @@ class StacksProjector implements Projector
                 ->first();
         }
 
-        Link::create([
+        $link = Link::create([
             'uuid' => $event->link_uuid,
             'url' => $event->url,
             'host' => $host,
@@ -99,9 +75,14 @@ class StacksProjector implements Projector
             'added_at' => $event->added_at,
         ]);
 
-        $stack->increment('link_count');
-
-        $tags->each->increment('link_count');
+        $link->tags()->sync(
+            collect($event->tags)->map(function (string $tagName) use ($event) {
+                return Tag::firstOrCreate([
+                    'user_uuid' => $event->user_uuid,
+                    'name' => $tagName,
+                ])->id;
+            })
+        );
     }
 
     public function onLinkDeleted(LinkDeleted $event): void
@@ -109,8 +90,6 @@ class StacksProjector implements Projector
         $link = Link::findByUuid($event->link_uuid);
 
         $link->delete();
-
-        $link->stack->decrement('link_count');
     }
 
     public function onTitleFetched(TitleFetched $event): void

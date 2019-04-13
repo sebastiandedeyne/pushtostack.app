@@ -3136,16 +3136,16 @@
         },
         {
             "name": "spatie/laravel-event-projector",
-            "version": "2.0.5",
+            "version": "2.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-event-projector.git",
-                "reference": "a50eb2ae88523d8243356482e7c10eee7d9f8dc1"
+                "reference": "db2e157e6ac95dc1de9f58265e8306c5aa54c446"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-event-projector/zipball/a50eb2ae88523d8243356482e7c10eee7d9f8dc1",
-                "reference": "a50eb2ae88523d8243356482e7c10eee7d9f8dc1",
+                "url": "https://api.github.com/repos/spatie/laravel-event-projector/zipball/db2e157e6ac95dc1de9f58265e8306c5aa54c446",
+                "reference": "db2e157e6ac95dc1de9f58265e8306c5aa54c446",
                 "shasum": ""
             },
             "require": {
@@ -3203,20 +3203,20 @@
                 "sourcing",
                 "spatie"
             ],
-            "time": "2019-04-12T12:57:40+00:00"
+            "time": "2019-04-13T14:08:09+00:00"
         },
         {
             "name": "spatie/laravel-query-builder",
-            "version": "1.17.1",
+            "version": "1.17.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-query-builder.git",
-                "reference": "f7c4a6d1ac19a08f8b8848e829d3b304132cdc6e"
+                "reference": "5c43fd28400bf4e8943692efb80fd5d67403520f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-query-builder/zipball/f7c4a6d1ac19a08f8b8848e829d3b304132cdc6e",
-                "reference": "f7c4a6d1ac19a08f8b8848e829d3b304132cdc6e",
+                "url": "https://api.github.com/repos/spatie/laravel-query-builder/zipball/5c43fd28400bf4e8943692efb80fd5d67403520f",
+                "reference": "5c43fd28400bf4e8943692efb80fd5d67403520f",
                 "shasum": ""
             },
             "require": {
@@ -3226,6 +3226,7 @@
                 "php": "^7.1"
             },
             "require-dev": {
+                "ext-json": "*",
                 "orchestra/testbench": "~3.6.0|~3.7.0|~3.8.0",
                 "phpunit/phpunit": "^7.0|^8.0"
             },
@@ -3260,7 +3261,7 @@
                 "laravel-query-builder",
                 "spatie"
             ],
-            "time": "2019-04-09T14:29:08+00:00"
+            "time": "2019-04-12T16:48:23+00:00"
         },
         {
             "name": "spatie/laravel-schemaless-attributes",

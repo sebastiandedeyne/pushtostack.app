@@ -4,7 +4,6 @@ use App\Domain\Stack\LinkAdded;
 use App\Domain\Stack\Models\Stack;
 use App\Domain\Stack\Models\Tag;
 use App\Domain\Stack\StackCreated;
-use App\Domain\Stack\TagCreated;
 use App\Domain\User\Models\User;
 use App\Domain\User\UserRegistered;
 use Illuminate\Database\Seeder;
@@ -108,7 +107,7 @@ class DatabaseSeeder extends Seeder
 
         $user = User::findByUuid($userUuid);
 
-        foreach ($this->links as [$url, $stackName, $tagNames]) {
+        foreach ($this->links as [$url, $stackName, $tags]) {
             $stack = Stack::where('name', $stackName)->first();
 
             if (!$stack) {
@@ -122,28 +121,13 @@ class DatabaseSeeder extends Seeder
                 $stack = Stack::where('name', $stackName)->firstOrFail();
             }
 
-            $tags = array_map(function (string $tagName) use ($user) {
-                $tag = Tag::where('name', $tagName)->first();
-
-                if (!$tag) {
-                    event(new TagCreated([
-                        'tag_uuid' => uuid(),
-                        'user_uuid' => $user->uuid,
-                        'name' => $tagName,
-                        'order' => Tag::max('order') + 1,
-                    ]));
-                }
-
-                return Tag::where('name', $tagName)->first();
-            }, $tagNames);
-
             event(new LinkAdded([
                 'link_uuid' => uuid(),
                 'stack_uuid' => $stack->uuid,
-                'tag_uuids' => Arr::pluck($tags, 'uuid'),
                 'user_uuid' => $userUuid,
                 'url' => $url,
                 'title' => null,
+                'tags' => $tags,
                 'added_at' => Carbon::now()->toDateTimeString(),
             ]));
         }

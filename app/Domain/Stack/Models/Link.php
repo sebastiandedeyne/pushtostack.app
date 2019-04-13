@@ -5,6 +5,7 @@ namespace App\Domain\Stack\Models;
 use App\Support\HasUuid;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Link extends Model
 {
@@ -25,5 +26,10 @@ class Link extends Model
     public function stack(): BelongsTo
     {
         return $this->belongsTo(Stack::class);
+    }
+
+    public function tags(): BelongsToMany
+    {
+        return $this->belongsToMany(Tag::class);
     }
 }

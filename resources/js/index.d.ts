@@ -4,14 +4,16 @@ export type Stack = {
   slug: string;
   order: number;
   link_count: number;
+  tags: Array<
+    Tag & {
+      link_count: number;
+    }
+  >;
 };
 
 export type Tag = {
-  uuid: string;
   name: string;
   slug: string;
-  order: number;
-  link_count: number;
 };
 
 export type Link = {

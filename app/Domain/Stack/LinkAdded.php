@@ -12,9 +12,6 @@ class LinkAdded extends DomainEvent
     /** @var string */
     public $stack_uuid;
 
-    /** @var string[] */
-    public $tag_uuids;
-
     /** @var string */
     public $user_uuid;
 
@@ -23,6 +20,9 @@ class LinkAdded extends DomainEvent
 
     /** @var string|null */
     public $title;
+
+    /** @var string[] */
+    public $tags;
 
     /** @var string */
     public $added_at;

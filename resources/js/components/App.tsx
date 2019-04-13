@@ -1,17 +1,15 @@
 import * as React from "react";
 import { useState, useEffect, useRef } from "react";
-import { Stack, Tag } from "../index.d";
+import { Stack } from "../index.d";
 import StackList from "./StackList";
-import TagList from "./TagList";
 import Links from "./Links";
 
 type Props = {
   userUuid: string;
   stacks: Array<Stack>;
-  tags: Array<Tag>;
 };
 
-export default function App({ stacks, tags }: Props) {
+export default function App({ stacks }: Props) {
   const [query, setQuery] = useState("in:inbox");
 
   const searchRef = useRef<HTMLInputElement>(null);
@@ -36,12 +34,7 @@ export default function App({ stacks, tags }: Props) {
         <StackList
           stacks={stacks}
           onStackClick={stack => setQuery(`in:${stack.slug}`)}
-          className="mb-8"
-        />
-        <TagList
-          tags={tags}
-          onTagClick={tag => setQuery(`#${tag.slug}`)}
-          onTagShiftClick={tag => setQuery(`${query} #${tag.slug}`.trim())}
+          onTagClick={(stack, tag) => setQuery(`in:${stack.slug} #${tag.slug}`)}
           className="mb-8"
         />
         <ul>

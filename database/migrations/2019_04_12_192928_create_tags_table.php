@@ -10,11 +10,8 @@ class CreateTagsTable extends Migration
     {
         Schema::create('tags', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->uuid('uuid');
             $table->string('name');
             $table->string('slug');
-            $table->unsignedInteger('order');
-            $table->unsignedInteger('link_count')->default(0);
             $table->uuid('user_uuid')->index();
         });
     }
